@@ -21,7 +21,7 @@ This repository represents my internship assessment work in Embedded Systems and
 - Serial communication
 
 ## Repository Structure
-- `Task-01/` – Creating a Snake Pattern Using LEDs 
+- Task-01 – Creating a Snake Pattern Using LEDs 
 
 
 ## Learning Outcome

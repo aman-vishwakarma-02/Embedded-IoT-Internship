@@ -21,8 +21,9 @@ This repository represents my internship assessment work in Embedded Systems and
 - Serial communication
 
 ## Repository Structure
+  ## Task
 - Task-01 – Creating a Snake Pattern Using LEDs 
 -Task-02-Fading of Led without using analogWrite function
-
+Task-03-Interface RGB Led and control with Switch 
 ## Learning Outcome
 This assessment helped me strengthen my fundamentals, improve hands-on skills, and understand real-world Embedded & IoT applications.

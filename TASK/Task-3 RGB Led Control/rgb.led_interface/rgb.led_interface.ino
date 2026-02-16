@@ -1,3 +1,8 @@
+// Interface RGB Led and Control with switch ,1st click on the switch Red led On , 2nd click Green led On and 3rd click Blue led On ,if more then 3 click it will be reset again
+
+
+
+
 const int redPin = 12;
 const int greenPin = 10;
 const int bluePin = 11;

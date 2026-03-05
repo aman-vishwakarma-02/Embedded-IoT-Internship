@@ -1,1 +1,105 @@
 
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+#define BTN_LEFT 9
+#define BTN_RIGHT 8
+#define LDR_PIN A0
+
+
+int threshold = 200;        
+int pos = 0;                 
+int prevPos = 0;            
+int direction = 1;           
+
+enum Mode {MANUAL, AUTO};
+Mode currentMode = MANUAL;
+
+
+unsigned long lastMoveTime = 0;
+const unsigned long moveInterval = 300;
+
+
+bool lastLeftState = HIGH, lastRightState = HIGH;
+unsigned long lastDebounceTimeLeft = 0, lastDebounceTimeRight = 0;
+const unsigned long debounceDelay = 50;
+
+
+byte customChar[8] = {
+  B11111,B10101,B11111,B00100,B01110,B10101,B00100,B01010
+};
+byte blankChar[8] = {
+  B00000,B00000,B00000,B00000,B00000,B00000,B00000,B00000
+};
+
+void setup() {
+  lcd.begin(16,2);
+  lcd.createChar(0, customChar);
+  lcd.createChar(1, blankChar);
+
+  pinMode(BTN_LEFT, INPUT_PULLUP);
+  pinMode(BTN_RIGHT, INPUT_PULLUP);
+
+  lcd.setCursor(pos,0);
+  lcd.write(byte(0));
+  lcd.setCursor(0,1);
+  lcd.print("Mode: Manual  LDR:");
+}
+
+void loop() {
+  int ldrValue = analogRead(LDR_PIN);
+
+ 
+  if (ldrValue >= threshold) currentMode = AUTO;
+  else currentMode = MANUAL;
+
+  
+  if (currentMode == MANUAL) {
+   
+    bool readingLeft = digitalRead(BTN_LEFT);
+    if (readingLeft != lastLeftState) lastDebounceTimeLeft = millis();
+    if ((millis() - lastDebounceTimeLeft) > debounceDelay) {
+      if (readingLeft == LOW && pos > 0) pos--;
+    }
+    lastLeftState = readingLeft;
+
+  
+    bool readingRight = digitalRead(BTN_RIGHT);
+    if (readingRight != lastRightState) lastDebounceTimeRight = millis();
+    if ((millis() - lastDebounceTimeRight) > debounceDelay) {
+      if (readingRight == LOW && pos < 15) pos++;
+    }
+    lastRightState = readingRight;
+  }
+
+  
+  if (currentMode == AUTO) {
+    if (millis() - lastMoveTime >= moveInterval) {
+      lastMoveTime = millis();
+      pos += direction;
+
+      if (pos >= 15) direction = -1;
+      if (pos <= 0) direction = 1;
+    }
+  }
+
+  
+  if (pos != prevPos) {
+    lcd.setCursor(prevPos,0);
+    lcd.write(byte(1)); 
+    lcd.setCursor(pos,0);
+    lcd.write(byte(0)); 
+    prevPos = pos;
+  }
+
+  
+  lcd.setCursor(0,1);
+  lcd.print("Mode:");
+  if (currentMode == MANUAL) lcd.print("Manual ");
+  else lcd.print("Auto   ");
+
+  lcd.print(" LDR:");
+  lcd.print(ldrValue);
+  lcd.print("   "); 
+  delay(50);
+}

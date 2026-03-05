@@ -23,6 +23,6 @@ This repository represents my internship assessment work in Embedded Systems and
 ## Repository Structure
   ## Assessmet
   ## Mini PROJECT
-  ## Task
+ 
 ## Learning Outcome
 This assessment helped me strengthen my fundamentals, improve hands-on skills, and understand real-world Embedded & IoT applications.
